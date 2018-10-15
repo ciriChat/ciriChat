@@ -1,0 +1,22 @@
+{
+  "name": "chat-bot",
+  "version": "1.0.0",
+  "description": "chat-bot",
+  "scripts": {
+    "install": "npm run install:server && npm run install:web",
+    "install:server": "cd server && npm install && cd ..",
+    "install:web": "cd web && npm install && cd ..",
+    "copy:web": "mkdir -p server/public && cp -a web/dist/. server/public/",
+    "postinstall": "npm run build:web && npm run copy:web",
+    "build:web": "cd web && npm run build && cd ..",
+    "start:server": "cd server && npm run start"
+  },
+  "engines": {
+    "node": "8.11.1",
+    "npm": "5.8.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}
