@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class ResponseService {
   constructor() {
-    this.host = 'http://cirichat.herokuapp.com';
+    this.host = 'https://cirichat.herokuapp.com';
   }
 
   getResponse(ques) {

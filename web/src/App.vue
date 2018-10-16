@@ -30,8 +30,9 @@ export default {
   methods: {
     newMessageAction (messageText) {
       this.messageFactory.getUserMessage(messageText);
+      console.log(`Sending post to server with question: '${messageText}'`);
       responseService.getResponse(messageText)
-      .then(res => setTimeout(() => this.messageFactory.getBotMessage(res.data), 300))
+      .then(res => this.messageFactory.getBotMessage(res.data))
       .catch(error => console.log(`Error getting response from backend: '${error}'`));
     }
   }

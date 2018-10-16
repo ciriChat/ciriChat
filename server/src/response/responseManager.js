@@ -1,12 +1,12 @@
 const axios = require('axios');
-const responseApiUrl = 'http://35.178.111.80/?question=';
+const responseApiUrl = 'https://35.178.111.80/question';
 
 class ResponseManager {
   constructor() {}
 
   getResponse(ques) {
-    let url = responseApiUrl + ques;
-    return axios.get(url);
+    let requestBody = {question: ques};
+    return axios.post(responseApiUrl, requestBody);
   }
 }
 
