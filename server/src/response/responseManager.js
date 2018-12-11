@@ -1,16 +1,13 @@
 const axios = require('axios');
-const https = require('https');
 
-const responseApiUrl = 'https://35.178.111.80/question';
+const responseApiUrl = process.env.RESPONSE_API_URL || 'http://35.195.184.216/question?question=';
 
 class ResponseManager {
   constructor() {}
 
-  getResponse(ques) {
-    let requestBody = {question: ques};
-    return axios.post(responseApiUrl, requestBody, {
-        httpsAgent: new https.Agent({rejectUnauthorized: false})
-    });
+  getResponse(question) {
+    let url = responseApiUrl + question;
+    return axios.get(url);
   }
 }
 
