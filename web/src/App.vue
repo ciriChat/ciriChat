@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="introduction">
-      Cześć, jestem Ciri...
+      Hi, I'm Ciri. Ask me a question.
     </div>
     <div id="main-container">
       <message-input @newMessage="newMessageAction"/>

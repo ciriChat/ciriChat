@@ -17,10 +17,10 @@ app.get('/', function (request, response) {
 });
 
 app.post('/answer', function (request, response) {
-  // console.log(`Received question: '${request.body.question}'`);
+  console.log(`Received question: '${request.body.question}'`);
   responseManager.getResponse(request.body.question)
   .then(answer => {
-    // console.log(`Received answer: ${answer.data}`);
+    console.log(`Received answer: ${answer.data}`);
     response.status(200).send(answer.data.best_answer);
   })
   .catch(error => console.log(`Error while getting response: ${error}`));
