@@ -17,13 +17,27 @@ app.get('/', function (request, response) {
 });
 
 app.post('/answer', function (request, response) {
-  console.log(`Received question: '${request.body.question}'`);
-  responseManager.getResponse(request.body.question)
-  .then(answer => {
-    console.log(`Received answer: ${answer.data}`);
-    response.status(200).send(answer.data.best_answer);
+  let question = request.body.question;
+  console.log(`Received question: '${question}'`);
+
+  responseManager.getResponseFromModel(question)
+  .then(modelAnswer => {
+    let ans = modelAnswer.data.answer;
+    console.log(`Received answer from model: ${ans}`);
+    let answerToSend;
+    if (ans === "None") {
+      responseManager.getResponse(question)
+      .then(chatbotAnswer => {
+        answerToSend = chatbotAnswer.data.best_answer;
+        console.log(`Received best answer from chatbot: ${answerToSend}`);
+      })
+      .catch(error => console.log(`Error while getting response from chatbot: ${error}`))
+    } else {
+      answerToSend = ans;  
+    }
+    response.status(200).send(answerToSend);
   })
-  .catch(error => console.log(`Error while getting response: ${error}`));
+  .catch(error => console.log(`Error while getting response from model: ${error}`));
 });
 
 app.listen(PORT, function () {
