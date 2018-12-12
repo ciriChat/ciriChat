@@ -20,6 +20,29 @@ app.post('/answer', function (request, response) {
   let question = request.body.question;
   console.log(`Received question: '${question}'`);
 
+  responseManager.checkPolishLanguage(question)
+  .then(res => {
+      if(res.data.polish) processPolishRequest(question, response)
+      else processEnglishRequest(question, response)
+  })
+  .catch(error => {
+    console.log(`error while checking polish language: ${error}`)
+    response.status(500).send()
+  })
+})
+
+function processPolishRequest(question, response) {
+  console.log('process polish question')
+  responseManager.getResponseFromRetrievalModel(question)
+  .then(res => {
+    const answer = res.data.message
+    console.log(`answer from retrieval model ${answer}`)
+    response.status(200).send(answer)
+  })
+}
+  
+
+function processEnglishRequest(question, response) {
   responseManager.getResponseFromModel(question)
   .then(modelAnswer => {
     let ans = modelAnswer.data.answer;
@@ -37,7 +60,8 @@ app.post('/answer', function (request, response) {
     }
   })
   .catch(error => console.log(`Error while getting response from model: ${error}`));
-});
+}
+
 
 app.listen(PORT, function () {
   console.log("Server is running at port:" + PORT);
