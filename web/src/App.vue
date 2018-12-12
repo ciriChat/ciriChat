@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div id="logo">
+      <img src="../static/images/logo.png">
+    </div>
     <div id="introduction">
       Hi, I'm Ciri. Ask me a question.
     </div>
