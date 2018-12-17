@@ -17,15 +17,15 @@ app.get('/', function (request, response) {
 });
 
 app.post('/answer', function (request, response) {
-  let question = request.body.question;
-  console.log(`Received question: '${question}'`);
+  let message = request.body.question;
+  console.log(`Received message: '${message}'`);
 
-  responseManager.checkPolishLanguage(question)
+  responseManager.checkPolishLanguage(message)
   .then(res => {
       if(res.data.polish) {
-        processPolishRequest(question, response);
+        processPolishRequest(message, response);
       } else {
-        processEnglishRequest(question, response);
+        processEnglishRequest(message, response);
       }
   })
   .catch(error => {
@@ -34,10 +34,11 @@ app.post('/answer', function (request, response) {
   })
 })
 
-function processPolishRequest(question, response) {
-  console.log(`Process polish message: '${question}'`);
+function processPolishRequest(message, response) {
+  console.log(`Process polish message: '${message}'`);
   if (isQuestion(message)) {
-    responseManager.getResponseFromSeq2SeqPolishModel(question)
+    console.log(`Processing polish question: '${message}'`)
+    responseManager.getResponseFromSeq2SeqPolishModel(message)
     .then(res => {
       const resp = res.data;
       const results = res.results;
@@ -48,8 +49,10 @@ function processPolishRequest(question, response) {
       console.log(`Error: '${err}'`);
     });
   } else {
-    responseManager.getResponseFromRetrievalPolishModel(question)
+    console.log(`Processing polish statement: '${message}`)
+    responseManager.getResponseFromRetrievalPolishModel(message)
     .then(res => {
+      console.log(`Received response from retrieval polish model: ${res}`);
       const answer = res.data.message;
       console.log(`Answer from retrieval model ${answer}`);
       response.status(200).send(answer);
@@ -60,14 +63,14 @@ function processPolishRequest(question, response) {
 }
   
 
-function processEnglishRequest(question, response) {
-  console.log(`Process english message: '${question}'`);
-  responseManager.getResponseFromSeq2SeqEnglishModel(question)
+function processEnglishRequest(message, response) {
+  console.log(`Process english message: '${message}'`);
+  responseManager.getResponseFromSeq2SeqEnglishModel(message)
   .then(modelAnswer => {
     let ans = modelAnswer.data.answer;
     console.log(`Received answer from model: ${ans}`);
     if (ans === "None") {
-      responseManager.getResponseFromChatbot(question)
+      responseManager.getResponseFromChatbot(message)
       .then(chatbotAnswer => {
         let answerToSend = chatbotAnswer.data.best_answer;
         console.log(`Received best answer from chatbot: ${answerToSend}`);
