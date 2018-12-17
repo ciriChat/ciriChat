@@ -9,7 +9,13 @@ const checkPolishLanguageUrl = `${retrievalModelPolishUrl}/language/check/polish
 const retrievalResponsePolishUrl = `${retrievalModelPolishUrl}/chat`;
 
 class ResponseManager {
-  constructor() {}
+  constructor() {
+    console.log(`English seq2seq knowledge model url: '${seq2SeqKnowledgeModelEnglishUrl}'`);
+    console.log(`English seq2seq chatbot url: '${seq2seqChatbotEnglishUrl}'`);
+    console.log(`Polish seq2seq knowledge model url: '${seq2SeqKnowledgeModelPolishUrl}'`);
+    console.log(`Check polish language url: '${checkPolishLanguageUrl}'`);
+    console.log(`Polish retrieval model url: '${retrievalModelPolishUrl}'`);
+  }
 
   checkPolishLanguage(msg) {
     return axios.put(checkPolishLanguageUrl, {'message': msg})

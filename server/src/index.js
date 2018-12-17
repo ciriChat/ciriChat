@@ -29,13 +29,13 @@ app.post('/answer', function (request, response) {
       }
   })
   .catch(error => {
-    console.log(`error while checking polish language: ${error}`)
+    console.log(`Error while checking polish language: ${error}`)
     response.status(500).send()
   })
 })
 
 function processPolishRequest(question, response) {
-  console.log('Process polish question')
+  console.log(`Process polish message: '${question}'`);
   if (isQuestion(message)) {
     responseManager.getResponseFromSeq2SeqPolishModel(question)
     .then(res => {
@@ -61,6 +61,7 @@ function processPolishRequest(question, response) {
   
 
 function processEnglishRequest(question, response) {
+  console.log(`Process english message: '${question}'`);
   responseManager.getResponseFromSeq2SeqEnglishModel(question)
   .then(modelAnswer => {
     let ans = modelAnswer.data.answer;
