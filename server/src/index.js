@@ -41,9 +41,9 @@ function processPolishRequest(message, response) {
     responseManager.getResponseFromSeq2SeqPolishModel(message)
     .then(res => {
       const resp = res.data;
-      const results = res.results;
+      const results = resp.results;
       console.log(`Received responses with average score: ${resp.avg_score}`);
-      const best_answer = results[0];
+      const best_answer = results[0].answer;
       response.status(200).send(best_answer);
     }).catch(err => {
       console.log(`Error: '${err}'`);
