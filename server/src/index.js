@@ -61,12 +61,12 @@ function processPolishRequest(question, response) {
   
 
 function processEnglishRequest(question, response) {
-  responseManager.getResponseFromModel(question)
+  responseManager.getResponseFromSeq2SeqEnglishModel(question)
   .then(modelAnswer => {
     let ans = modelAnswer.data.answer;
     console.log(`Received answer from model: ${ans}`);
     if (ans === "None") {
-      responseManager.getResponse(question)
+      responseManager.getResponseFromChatbot(question)
       .then(chatbotAnswer => {
         let answerToSend = chatbotAnswer.data.best_answer;
         console.log(`Received best answer from chatbot: ${answerToSend}`);
