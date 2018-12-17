@@ -22,8 +22,11 @@ app.post('/answer', function (request, response) {
 
   responseManager.checkPolishLanguage(question)
   .then(res => {
-      if(res.data.polish) processPolishRequest(question, response)
-      else processEnglishRequest(question, response)
+      if(res.data.polish) {
+        processPolishRequest(question, response);
+      } else {
+        processEnglishRequest(question, response);
+      }
   })
   .catch(error => {
     console.log(`error while checking polish language: ${error}`)
@@ -32,13 +35,28 @@ app.post('/answer', function (request, response) {
 })
 
 function processPolishRequest(question, response) {
-  console.log('process polish question')
-  responseManager.getResponseFromRetrievalModel(question)
-  .then(res => {
-    const answer = res.data.message
-    console.log(`answer from retrieval model ${answer}`)
-    response.status(200).send(answer)
-  })
+  console.log('Process polish question')
+  if (isQuestion(message)) {
+    responseManager.getResponseFromSeq2SeqPolishModel(question)
+    .then(res => {
+      const resp = res.data;
+      const results = res.results;
+      console.log(`Received responses with average score: ${resp.avg_score}`);
+      const best_answer = results[0];
+      response.status(200).send(best_answer);
+    }).error(err => {
+      console.log(`Error: '${err}'`);
+    });
+  } else {
+    responseManager.getResponseFromRetrievalPolishModel(question)
+    .then(res => {
+      const answer = res.data.message;
+      console.log(`Answer from retrieval model ${answer}`);
+      response.status(200).send(answer);
+    }).error(err => {
+      console.log(`Error: '${err}'`);
+    });
+  }
 }
   
 
@@ -62,6 +80,9 @@ function processEnglishRequest(question, response) {
   .catch(error => console.log(`Error while getting response from model: ${error}`));
 }
 
+function isQuestion(message) {
+  return message[message.length - 1] === '?';
+}
 
 app.listen(PORT, function () {
   console.log("Server is running at port:" + PORT);
