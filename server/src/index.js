@@ -29,7 +29,7 @@ app.post('/answer', function (request, response) {
       }
   })
   .catch(error => {
-    console.log(`Error while checking polish language: ${error}`)
+    console.log(`Error while checking polish language: ${error}`);
     response.status(500).send()
   })
 })
@@ -37,7 +37,7 @@ app.post('/answer', function (request, response) {
 function processPolishRequest(message, response) {
   console.log(`Process polish message: '${message}'`);
   if (isQuestion(message)) {
-    console.log(`Processing polish question: '${message}'`)
+    console.log(`Processing polish question: '${message}'`);
     responseManager.getResponseFromSeq2SeqPolishModel(message)
     .then(res => {
       const resp = res.data;
@@ -45,18 +45,17 @@ function processPolishRequest(message, response) {
       console.log(`Received responses with average score: ${resp.avg_score}`);
       const best_answer = results[0];
       response.status(200).send(best_answer);
-    }).error(err => {
+    }).catch(err => {
       console.log(`Error: '${err}'`);
     });
   } else {
-    console.log(`Processing polish statement: '${message}`)
+    console.log(`Processing polish statement: '${message}'`);
     responseManager.getResponseFromRetrievalPolishModel(message)
     .then(res => {
-      console.log(`Received response from retrieval polish model: ${res}`);
       const answer = res.data.message;
       console.log(`Answer from retrieval model ${answer}`);
       response.status(200).send(answer);
-    }).error(err => {
+    }).catch(err => {
       console.log(`Error: '${err}'`);
     });
   }
