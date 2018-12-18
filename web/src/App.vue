@@ -33,9 +33,9 @@ export default {
   methods: {
     newMessageAction (messageText) {
       this.messageFactory.getUserMessage(messageText);
-      console.log(`Sending post to server with question: '${messageText}'`);
+      console.log(`Sending post to server with message: '${messageText}'`);
       responseService.getResponse(messageText)
-      .then(res => this.messageFactory.getBotMessage(res.data))
+      .then(res => this.messageFactory.getBotMessage(res.data.response))
       .catch(error => console.log(`Error getting response from backend: '${error}'`));
     }
   }

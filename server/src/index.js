@@ -16,8 +16,8 @@ app.get('/', function (request, response) {
   response.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-app.post('/answer', function (request, response) {
-  let message = request.body.question;
+app.post('/response', function (request, response) {
+  let message = request.body.message;
   console.log(`Received message: '${message}'`);
 
   responseManager.checkPolishLanguage(message)
@@ -44,7 +44,7 @@ function processPolishRequest(message, response) {
       const results = resp.results;
       console.log(`Received responses with average score: ${resp.avg_score}`);
       const best_answer = results[0].answer;
-      response.status(200).send(best_answer);
+      response.status(200).send({response: best_answer});
     }).catch(err => {
       console.log(`Error: '${err}'`);
     });
@@ -54,7 +54,7 @@ function processPolishRequest(message, response) {
     .then(res => {
       const answer = res.data.message;
       console.log(`Answer from retrieval model ${answer}`);
-      response.status(200).send(answer);
+      response.status(200).send({response: answer});
     }).catch(err => {
       console.log(`Error: '${err}'`);
     });
@@ -73,11 +73,11 @@ function processEnglishRequest(message, response) {
       .then(chatbotAnswer => {
         let answerToSend = chatbotAnswer.data.best_answer;
         console.log(`Received best answer from chatbot: ${answerToSend}`);
-        response.status(200).send(answerToSend);
+        response.status(200).send({response: answerToSend});
       })
       .catch(error => console.log(`Error while getting response from chatbot: ${error}`))
     } else {
-      response.status(200).send(ans);
+      response.status(200).send({response: ans});
     }
   })
   .catch(error => console.log(`Error while getting response from model: ${error}`));

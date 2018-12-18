@@ -5,8 +5,8 @@ class ResponseService {
     this.host = 'https://cirichat.herokuapp.com';
   }
 
-  getResponse(ques) {
-    return axios.post(this.host + '/answer', {"question": ques});
+  getResponse(message) {
+    return axios.post(this.host + '/response', {message: message});
   }
 }
 
