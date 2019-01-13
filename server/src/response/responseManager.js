@@ -26,8 +26,7 @@ class ResponseManager {
   }
 
   getResponseFromSeq2SeqPolishModel(question) {
-    let url = seq2SeqKnowledgeModelPolishUrl + question;
-    return axios.get(url);
+    return axios.post(seq2SeqKnowledgeModelPolishUrl, {'question': question});
   }
  
   getResponseFromSeq2SeqEnglishModel(question) {
@@ -36,8 +35,7 @@ class ResponseManager {
   }
 
   getResponseFromChatbot(question) {
-    let url = seq2seqChatbotEnglishUrl + question;
-    return axios.get(url);
+    return axios.post(seq2seqChatbotEnglishUrl, {'question': question});
   }
 
 }
